@@ -1,11 +1,16 @@
 import setuptools
+import json
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+with open("build.json", "r") as build_data:
+    build_data = json.loads(build_data.read())
+    version = build_data.get("version")
+
 setuptools.setup(
     name="tfe_backup",
-    version="2.2.0",
+    version=version,
     author="Dave Arnold",
     author_email="dave@happypathway.com",
     description="Utilties for backing up TFE Workspaces as Terraform Code",
