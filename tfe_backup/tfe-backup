@@ -41,17 +41,19 @@ def parse_workspace(org, _ws, basedir, new_workspace_name=False, filename=False,
         _filename = os.path.join(basedir, "{0}.tf".format(filename))
     if new_workspace_name:
         _ws = new_workspace_name
-
-    with open(_filename, "w") as workspace_file:
-        workspace_file.write(
+    try:
+        with open(_filename, "w") as workspace_file:
+            workspace_file.write(
                 ws.rendered(force=True, 
                     organization_name="${var.organization}", 
                     workspace_name=_ws
                 )
             )
-        for _var in ws.variables(new_workspace_name, skip_keys):
-            workspace_file.write(_var)
-
+            for _var in ws.variables(new_workspace_name, skip_keys):
+                workspace_file.write(_var)
+    except Exception, e:
+        sys.stderr.write(str(e))
+        sys.stderr.write("\n")
 
 def add_vars(_vars):
     for var in _vars:
