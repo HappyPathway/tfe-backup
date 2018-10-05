@@ -8,7 +8,7 @@ pipeline {
     }
     stage('Publish') {
       steps {
-        archiveArtifacts(artifacts: 'tfe_backup-*.tar.gz', onlyIfSuccessful: true)
+        archiveArtifacts(artifacts: 'dist/tfe_backup-*.tar.gz', onlyIfSuccessful: true)
       }
     }
   }
