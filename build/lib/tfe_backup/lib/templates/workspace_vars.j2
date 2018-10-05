@@ -1,0 +1,9 @@
+resource "tfe_variable" "{{ workspace.split("-")|join("_")|lower }}_{{ key }}" {
+  key = "{{ key }}"
+  value = "{{ value }}"
+  category = "{{ category }}"
+  workspace_id = "${tfe_workspace.{{ workspace }}.id}"
+  hcl = {{ hcl|lower }}
+  sensitive = {{ sensitive|lower }}
+}
+

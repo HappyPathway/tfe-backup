@@ -5,14 +5,23 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tfe_backup",
-    version="0.0.1",
+    version="0.1.30",
     author="Dave Arnold",
     author_email="dave@happypathway.com",
     description="Utilties for backing up TFE Workspaces as Terraform Code",
+    install_requires = ["requests", "jinja2"],
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/HappyPathway/TFE_WorkspaceBackup",
-    packages=setuptools.find_packages(),
+    scripts=['tfe_backup/tfe-backup'],
+    packages=["tfe_backup"],
+    package_data={
+      'tfe_backup': [
+          "lib/templates/undefined_vars.j2",
+          "lib/templates/workspace.j2",
+          "lib/templates/workspace_vars.j2"
+        ],
+    },
     classifiers=[
         "Programming Language :: Python :: 2.7",
         "License :: OSI Approved :: MIT License",
