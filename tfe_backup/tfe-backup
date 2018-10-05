@@ -2,6 +2,7 @@
 from tfe_backup.lib import workspace
 from tfe_backup.lib import workspace_variables
 import os
+import json
 from subprocess import Popen, PIPE
 import shlex
 import sys
@@ -52,6 +53,10 @@ def parse_workspace(org, _ws, basedir, new_workspace_name=False, filename=False,
             for _var in ws.variables(new_workspace_name, skip_keys):
                 workspace_file.write(_var)
     except Exception, e:
+        print json.dumps(ws._workspace_response,
+            indent=4,
+            sort_keys=True,
+            separators=(',',':'))
         sys.stderr.write(str(e))
         sys.stderr.write("\n")
 
