@@ -15,7 +15,8 @@ pipeline {
         }
         stage('PyPi Publish') {
           steps {
-            sh 'twine upload dist/*'
+            sh '''export PYTHONWARNINGS=false
+twine upload dist/*'''
           }
         }
       }
