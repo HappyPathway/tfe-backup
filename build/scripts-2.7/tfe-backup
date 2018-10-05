@@ -39,7 +39,7 @@ def parse_workspace(org, _ws, basedir, new_workspace_name=False, filename=False,
         workspace_file.write(
                 ws.rendered(force=True, 
                     organization_name="${var.organization}", 
-                        workspace_name=_ws
+                    workspace_name=_ws
                 )
             )
         for _var in ws.variables(new_workspace_name, skip_keys):

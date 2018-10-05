@@ -83,9 +83,14 @@ class TFEWorkSpace(object):
             ing_submod = vcs_repo_data["ingress_submodules"]
             vcs_repo_data["ingress_submodules"] = str(ing_submod).lower()
             vcs_repo_data["oauth_token_id"] = "${var.oauth_token_id}"
+
+            working_directory = self._workspace_response.get("working-directory")
+            if not working_directory:
+                working_directory = []
+                
             almost_rendered = partial(self.ws_template.render,
                 vcs_repo=vcs_repo_data,
-                working_directory=self._workspace_response.get("working-directory", ""),
+                working_directory=working_directory,
                 terraform_version=self._workspace_response.get("terraform-version"), 
             )
             if not self.clone:
