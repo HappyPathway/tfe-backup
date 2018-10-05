@@ -19,7 +19,7 @@ setuptools.setup(
     url="https://github.com/HappyPathway/TFE_WorkspaceBackup",
     scripts=[
         'tfe_backup/tfe-backup',
-        'scripts/oauth_tokens'
+        'scripts/tfe-oauth-tokens'
     ],
     packages=["tfe_backup"],
     package_data={

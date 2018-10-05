@@ -36,5 +36,11 @@ if __name__ == '__main__':
     parser.add_option('--config', default=os.path.expanduser("~/.terraformrc"))
     parser.add_option('--api', default="app.terraform.io")
     opt, args = parser.parse_args()
+
+    if not os.path.isfile(opt.config):
+        sys.stderr.write("This script requires having a valid ~/.terraformrc file.\n")
+        sys.stderr.write("https://www.terraform.io/docs/commands/cli-config.html#configuration-file-syntax")
+        sys.exit(1)
+        
     main(opt, args)
 
