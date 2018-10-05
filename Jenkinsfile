@@ -15,8 +15,7 @@ pipeline {
         }
         stage('PyPi Publish') {
           steps {
-            sh '''pip install --user \'requests[security]\' 2>/dev/null || echo
-twine upload dist/*'''
+            sh 'twine upload dist/*'
           }
         }
       }
