@@ -6,12 +6,15 @@ from subprocess import Popen, PIPE
 import shlex
 import sys
 
-def _call(cmd):
+def _call(cmd, error_message=None):
     p = Popen(shlex.split(cmd), 
             stdout=PIPE,
             stderr=PIPE)
     out, err = p.communicate()
     if err:
+        if error_message:
+            sys.stderr.write(error_message)
+            sys.stderr.write("\n")
         sys.stderr.write(str(err))
         sys.stderr.write("\n")
         sys.exit(1)
@@ -22,6 +25,9 @@ def sanitize_path(path):
     path = os.path.abspath(path)
     return path
 
+
+def which_terraform():
+    _call("which terraform", "This utility requires Terraform. Please download and install.")
 
 def parse_workspace(org, _ws, basedir, new_workspace_name=False, filename=False, skip_keys=None):
     if skip_keys is None:
@@ -85,6 +91,10 @@ def main(opt):
 
     # perform post processing to validate configurations
     os.chdir(sanitize_path(opt.basedir))
+
+    if opt.fmt or opt.init or opt.validate:
+        which_terraform()
+        
     if opt.fmt:
         _call("terraform fmt")
 

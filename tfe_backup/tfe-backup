@@ -33,6 +33,7 @@ def parse_workspace(org, _ws, basedir, new_workspace_name=False, filename=False,
     if skip_keys is None:
         skip_keys = []
     
+    print "Org: ", org, "Workspace: ", _ws
     ws = workspace.TFEWorkSpace(org, _ws)
     if not filename:
         _filename = os.path.join(basedir, "{0}.tf".format(_ws))
@@ -92,9 +93,9 @@ def main(opt):
     # perform post processing to validate configurations
     os.chdir(sanitize_path(opt.basedir))
 
-    if opt.fmt or opt.init or opt.validate:
-        which_terraform()
-        
+    # make sure terraform is installed
+    which_terraform()
+
     if opt.fmt:
         _call("terraform fmt")
 
