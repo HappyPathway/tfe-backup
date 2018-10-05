@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: tfe-backup
+Version: 0.0.1
+Summary: Utilties for backing up TFE Workspaces as Terraform Code
+Home-page: https://github.com/HappyPathway/TFE_WorkspaceBackup
+Author: Dave Arnold
+Author-email: dave@happypathway.com
+License: UNKNOWN
+Description: # TFE_WorkspaceBackup
+        This tool provides the ability to backup terraform enterprise workspaces.
+        It will use the TFE Rest API and collect data about your workspaces, then using templates, will create proper terraform configurations to allow you to rebuild the workspaces.
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 2.7
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
