@@ -1,4 +1,5 @@
 #!/usr/local/bin/python
+from __future__ import print_function
 import requests
 import os
 import json
@@ -15,7 +16,7 @@ def main(opt, args):
     try:
         org = args.pop()
     except:
-        print "Not enough arguments. Please provide TFE OrgName"
+        print("Not enough arguments. Please provide TFE OrgName")
     atlas_token = hcl_config(opt.api, opt.config)
 
     headers = {"Authorization": "Bearer {0}".format(atlas_token)}
@@ -23,10 +24,10 @@ def main(opt, args):
     resp = requests.get("https://{0}/api/v2/organizations/{1}/oauth-tokens".format(opt.api, org), headers=headers)
     data = resp.json()
     try:
-        print "Token: {0}".format(data.get("data")[0].get("id"))
+        print(data.get("data")[0].get("id"))
     except:
-        print "Could not find Token. Have you connected your VCS?"
-        print "Please go to: https://app.terraform.io/app/{0}/settings/version-control".format(org)
+        print("Could not find Token. Have you connected your VCS?")
+        print("Please go to: https://app.terraform.io/app/{0}/settings/version-control".format(org))
         if "y" in raw_input("Open Browser? "):
             os.system("open https://app.terraform.io/app/{0}/settings/version-control".format(org))
             
@@ -41,6 +42,6 @@ if __name__ == '__main__':
         sys.stderr.write("This script requires having a valid ~/.terraformrc file.\n")
         sys.stderr.write("https://www.terraform.io/docs/commands/cli-config.html#configuration-file-syntax")
         sys.exit(1)
-        
+
     main(opt, args)
 
