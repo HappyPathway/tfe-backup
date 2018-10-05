@@ -7,8 +7,17 @@ pipeline {
       }
     }
     stage('Publish') {
-      steps {
-        archiveArtifacts(artifacts: 'dist/tfe_backup-*.tar.gz', onlyIfSuccessful: true)
+      parallel {
+        stage('Publish') {
+          steps {
+            archiveArtifacts(artifacts: 'dist/tfe_backup-*.tar.gz', onlyIfSuccessful: true)
+          }
+        }
+        stage('PyPi Publish') {
+          steps {
+            sh 'twine upload --repository-url dist/*'
+          }
+        }
       }
     }
   }
