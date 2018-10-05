@@ -9,11 +9,18 @@ setuptools.setup(
     author="Dave Arnold",
     author_email="dave@happypathway.com",
     description="Utilties for backing up TFE Workspaces as Terraform Code",
-    install_requires = ["requests", "jinja2"],
+    install_requires = [
+        "requests", 
+        "jinja2",
+        "hcl"
+    ],
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/HappyPathway/TFE_WorkspaceBackup",
-    scripts=['tfe_backup/tfe-backup'],
+    scripts=[
+        'tfe_backup/tfe-backup',
+        'scripts/oauth_tokens'
+    ],
     packages=["tfe_backup"],
     package_data={
       'tfe_backup': [

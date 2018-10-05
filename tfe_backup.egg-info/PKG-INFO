@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: tfe-backup
-Version: 2.0.0
+Version: 2.1.0
 Summary: Utilties for backing up TFE Workspaces as Terraform Code
 Home-page: https://github.com/HappyPathway/TFE_WorkspaceBackup
 Author: Dave Arnold

@@ -28,7 +28,9 @@ def sanitize_path(path):
 
 
 def which_terraform():
-    _call("which terraform", "This utility requires Terraform. Please download and install.")
+    if os.system("which terraform"):
+        sys.stderr.write("This utility requires Terraform. Please download and install.\n")
+        sys.exit(1)
 
 def parse_workspace(org, _ws, basedir, new_workspace_name=False, filename=False, skip_keys=None):
     if skip_keys is None:
