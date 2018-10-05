@@ -15,7 +15,7 @@ pipeline {
         }
         stage('PyPi Publish') {
           steps {
-            sh '''PYTHONWARNINGS=InsecureRequestWarning,InsecurePlatformWarning
+            sh '''export PYTHONWARNINGS=InsecureRequestWarning,InsecurePlatformWarning,SNIMissingWarning
 twine upload dist/*'''
           }
         }
