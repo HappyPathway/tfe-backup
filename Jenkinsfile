@@ -15,7 +15,7 @@ pipeline {
         }
         stage('PyPi Publish') {
           steps {
-            sh '''export PYTHONWARNINGS=InsecureRequestWarning,InsecurePlatformWarning,SNIMissingWarning
+            sh '''pip install --user \'requests[security]\' 2>/dev/null || echo
 twine upload dist/*'''
           }
         }
