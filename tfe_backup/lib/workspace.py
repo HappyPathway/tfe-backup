@@ -85,7 +85,7 @@ class TFEWorkSpace(object):
             vcs_repo_data["oauth_token_id"] = "${var.oauth_token_id}"
             almost_rendered = partial(self.ws_template.render,
                 vcs_repo=vcs_repo_data,
-                working_directory=self._workspace_response.get("working-directory"),
+                working_directory=self._workspace_response.get("working-directory", ""),
                 terraform_version=self._workspace_response.get("terraform-version"), 
             )
             if not self.clone:

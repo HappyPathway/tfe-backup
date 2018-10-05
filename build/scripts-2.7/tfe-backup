@@ -61,7 +61,7 @@ def main(opt):
     basedir = sanitize_path(opt.basedir)
     workspace.TFEWorkSpace.base_url = opt.api
     workspace_variables.TFEWorkSpaceVariables.base_url = opt.api
-    workspace_variables.TFEWorkSpaceVariables.base_dir = basedir
+    workspace_variables.TFEWorkSpaceVariables.basedir = basedir
     print "Org: ", opt.tfe_organization
     
     for _ws in workspace.TFEWorkSpace.list(opt.tfe_organization):
