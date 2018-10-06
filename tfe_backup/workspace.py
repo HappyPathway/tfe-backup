@@ -3,6 +3,7 @@ import os
 from jinja2 import Template
 from functools import partial
 from tfe_backup.workspace_variables import TFEWorkSpaceVariables
+from tfe_backup.team_access import TFETeamAccess
 import urllib
 
 class TFEWorkSpace(object):
@@ -58,6 +59,11 @@ class TFEWorkSpace(object):
         for ws_var in tws_vars.rendered(workspace, skip_keys):
             yield ws_var
 
+    def team_access(self, workspace):
+        team_access = TFETeamAccess(self._workspace, self._workspace_id)
+        for ta_access in team_access.rendered(workspace):
+            yield ta_access
+
     def workspace(self):
         if self._workspace_response:
             return self._workspace_response
@@ -65,6 +71,7 @@ class TFEWorkSpace(object):
             resp = self.session.get(self.api_url)
             resp.raise_for_status()
             self._workspace_response = resp.json().get("data").get("attributes")
+            self._workspace_id = resp.json().get("data").get("id")
             return self._workspace_response
 
 

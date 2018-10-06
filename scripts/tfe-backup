@@ -2,6 +2,7 @@
 from __future__ import print_function
 from tfe_backup import workspace
 from tfe_backup import workspace_variables
+from tfe_backup import team_access
 import os
 import json
 from subprocess import Popen, PIPE
@@ -53,8 +54,13 @@ def parse_workspace(org, _ws, basedir, new_workspace_name=False, filename=False,
                     workspace_name=_ws
                 )
             )
+            
             for _var in ws.variables(new_workspace_name, skip_keys):
                 workspace_file.write(_var)
+            
+            for _team_access in ws.team_access(new_workspace_name):
+                workspace_file.write(_team_access)
+
     except Exception as e:
         if os.environ.get("TFE_BACKUP_DEBUG"):
             print(json.dumps(ws._workspace_response,
@@ -80,6 +86,9 @@ def main(opt):
     workspace.TFEWorkSpace.base_url = opt.api
     workspace_variables.TFEWorkSpaceVariables.base_url = opt.api
     workspace_variables.TFEWorkSpaceVariables.basedir = basedir
+    team_access.TFETeamAccess.base_url = opt.api
+    team_access.TFETeamAccess.basedir = basedir
+
     print("Org: ", opt.tfe_organization)
     
     for _ws in workspace.TFEWorkSpace.list(opt.tfe_organization):

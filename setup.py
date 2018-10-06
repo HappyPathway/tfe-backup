@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tfe-backup",
-    version="5.2.0",
+    version="5.3.0",
     author="HappyPathway",
     author_email="info@happypathway.com",
     description="Utilties for backing up TFE Workspace Configurations as Terraform Code",
