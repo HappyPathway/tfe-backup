@@ -1,5 +1,5 @@
 
-resource "tfe_workspace" "{{ workspace_name }}" {
+resource "tfe_workspace" "{{ workspace_name.split("-")|join("_") }}" {
     name = "{{ workspace_name }}"
     organization = "{{ organization }}"
     {% if auto_apply and auto_apply|length > 0 %}

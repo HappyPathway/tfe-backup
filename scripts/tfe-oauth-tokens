@@ -27,7 +27,7 @@ def main(opt, args):
     except UnboundLocalError:
         sys.stderr.write("Please specify TFE Organization\n")
         sys.exit(1)
-        
+
     try:
         print(data.get("data")[0].get("id"))
     except:
@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
     if not os.path.isfile(opt.config):
         sys.stderr.write("This script requires having a valid ~/.terraformrc file.\n")
-        sys.stderr.write("https://www.terraform.io/docs/commands/cli-config.html#configuration-file-syntax")
+        sys.stderr.write("https://www.terraform.io/docs/commands/cli-config.html#configuration-file-syntax\n")
         sys.exit(1)
 
     main(opt, args)
