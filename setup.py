@@ -24,9 +24,7 @@ setuptools.setup(
     ],
     packages=[
         "tfe_backup",
-        "tfe_backup.lib",
-        "tfe_backup.lib.workspace",
-        "tfe_backup.lib.workspace_variables"
+        "tfe_backup.lib"
     ],
     package_data={
       'tfe_backup': [
