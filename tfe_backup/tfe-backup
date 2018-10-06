@@ -55,7 +55,7 @@ def parse_workspace(org, _ws, basedir, new_workspace_name=False, filename=False,
             )
             for _var in ws.variables(new_workspace_name, skip_keys):
                 workspace_file.write(_var)
-    except Exception, e:
+    except Exception as e:
         if os.environ.get("TFE_BACKUP_DEBUG"):
             print(json.dumps(ws._workspace_response,
                 indent=4,
