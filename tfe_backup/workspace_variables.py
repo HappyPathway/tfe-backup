@@ -63,7 +63,7 @@ class TFEWorkSpaceVariables(object):
             if vars_data.get("hcl"):
                 # {{ workspace.split("-")|join("_")|lower }}_{{ key }}
                 vars_value = vars_data["value"]
-                key_name = "{0}_{1}".format("_".join(self._workspace.split("-")).lower(),
+                key_name = "{0}_{1}".format("_".join(self._workspace.split("-")),
                                             vars_data.get("key").lower())
                 vars_data["value"] = "${file(\"${path.module}/"+key_name+"\")}"
                 with open(os.path.join(self.basedir, key_name), "w") as key_file:
@@ -75,6 +75,6 @@ class TFEWorkSpaceVariables(object):
     def define_variables():
         with open("{0}/templates/undefined_vars.j2".format(TFEWorkSpaceVariables._base_dir)) as vars_template:
             vars_template = Template(vars_template.read())
-        for var in TFEWorkSpaceVariables.undefined_variables:
+        for var in sorted(TFEWorkSpaceVariables.undefined_variables):
             yield vars_template.render({"key": var})
 

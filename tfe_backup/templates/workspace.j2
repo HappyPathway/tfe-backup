@@ -7,7 +7,7 @@ resource "tfe_workspace" "{{ workspace_name }}" {
     {% endif %}
     terraform_version = "{{ terraform_version }}"
     {% if working_directory and working_directory|length > 0 %}
-    working_directory = {{ working_directory }}
+    working_directory = "{{ working_directory }}"
     {% endif %}
     vcs_repo = {
         identifier = "{{ vcs_repo.identifier }}"

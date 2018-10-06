@@ -6,10 +6,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tfe-backup",
-    version="4.0.0",
+    version="5.2.0",
     author="HappyPathway",
     author_email="info@happypathway.com",
-    description="Utilties for backing up TFE Workspaces as Terraform Code",
+    description="Utilties for backing up TFE Workspace Configurations as Terraform Code",
     install_requires = [
         "requests", 
         "jinja2",
@@ -31,9 +31,9 @@ setuptools.setup(
     ],
     package_data={
       'tfe_backup': [
-          "lib/templates/undefined_vars.j2",
-          "lib/templates/workspace.j2",
-          "lib/templates/workspace_vars.j2"
+          "templates/undefined_vars.j2",
+          "templates/workspace.j2",
+          "templates/workspace_vars.j2"
         ],
     },
     python_requires='>=3',

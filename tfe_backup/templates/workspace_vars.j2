@@ -1,4 +1,4 @@
-resource "tfe_variable" "{{ workspace.split("-")|join("_")|lower }}_{{ key }}" {
+resource "tfe_variable" "{{ workspace.split("-")|join("_") }}_{{ key }}" {
   key = "{{ key }}"
   value = "{{ value }}"
   category = "{{ category }}"
