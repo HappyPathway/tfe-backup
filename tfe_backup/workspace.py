@@ -2,7 +2,7 @@ import requests
 import os
 from jinja2 import Template
 from functools import partial
-from workspace_variables import TFEWorkSpaceVariables
+from tfe_backup.workspace_variables import TFEWorkSpaceVariables
 import urllib
 
 class TFEWorkSpace(object):
