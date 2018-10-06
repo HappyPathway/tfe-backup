@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tfe_backup",
-    version="2.5.1",
+    version="3.0.0",
     author="Dave Arnold",
     author_email="dave@happypathway.com",
     description="Utilties for backing up TFE Workspaces as Terraform Code",
@@ -19,12 +19,11 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/HappyPathway/TFE_WorkspaceBackup",
     scripts=[
-        'tfe_backup/tfe-backup',
+        'scripts/tfe-backup',
         'scripts/tfe-oauth-tokens'
     ],
     packages=[
-        "tfe_backup",
-        "tfe_backup.lib"
+        "tfe_backup"
     ],
     package_data={
       'tfe_backup': [

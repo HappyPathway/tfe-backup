@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
-from tfe_backup.lib import workspace
-from tfe_backup.lib import workspace_variables
+from tfe_backup import workspace
+from tfe_backup import workspace_variables
 import os
 import json
 from subprocess import Popen, PIPE
