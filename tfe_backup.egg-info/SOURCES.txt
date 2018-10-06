@@ -4,6 +4,7 @@ scripts/tfe-backup
 scripts/tfe-oauth-tokens
 tfe_backup/__Init__.py
 tfe_backup/__init__.py
+tfe_backup/team_access.py
 tfe_backup/workspace.py
 tfe_backup/workspace_variables.py
 tfe_backup.egg-info/PKG-INFO
@@ -11,6 +12,7 @@ tfe_backup.egg-info/SOURCES.txt
 tfe_backup.egg-info/dependency_links.txt
 tfe_backup.egg-info/requires.txt
 tfe_backup.egg-info/top_level.txt
+tfe_backup/templates/team_access.j2
 tfe_backup/templates/undefined_vars.j2
 tfe_backup/templates/workspace.j2
 tfe_backup/templates/workspace_vars.j2

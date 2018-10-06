@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: tfe-backup
-Version: 5.3.0
+Version: 5.4.5
 Summary: Utilties for backing up TFE Workspace Configurations as Terraform Code
 Home-page: https://github.com/HappyPathway/tfe-backup
 Author: HappyPathway

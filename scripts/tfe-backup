@@ -34,10 +34,28 @@ def which_terraform():
         sys.stderr.write("This utility requires Terraform. Please download and install.\n")
         sys.exit(1)
 
-def parse_workspace(org, _ws, basedir, new_workspace_name=False, filename=False, skip_keys=None):
-    if skip_keys is None:
-        skip_keys = []
+
+def parse_variables(basedir, ws, ws_name, skip_keys):
+    try:
+        with open(os.path.join(basedir, "{0}_vars.tf".format(ws_name)), "w") as vars_file:
+            for _var in ws.variables(ws_name, skip_keys):
+                vars_file.write(_var)
+    except Exception as e:
+        sys.stderr.write(str(e))
+        sys.stderr.write("\n")
     
+
+def parse_teams(basedir, ws, ws_name):
+    try:
+        with open(os.path.join(basedir, "{0}_teams.tf".format(ws_name)), "w") as teams_file:
+            for _team_access in ws.team_access(ws_name):
+                teams_file.write(_team_access)
+    except Exception as e:
+        sys.stderr.write(str(e))
+        sys.stderr.write("\n")
+
+
+def parse_workspace(org, _ws, basedir, new_workspace_name=False, filename=False):
     print("Org: ", org, "Workspace: ", _ws)
     ws = workspace.TFEWorkSpace(org, _ws)
     if not filename:
@@ -54,13 +72,6 @@ def parse_workspace(org, _ws, basedir, new_workspace_name=False, filename=False,
                     workspace_name=_ws
                 )
             )
-            
-            for _var in ws.variables(new_workspace_name, skip_keys):
-                workspace_file.write(_var)
-            
-            for _team_access in ws.team_access(new_workspace_name):
-                workspace_file.write(_team_access)
-
     except Exception as e:
         if os.environ.get("TFE_BACKUP_DEBUG"):
             print(json.dumps(ws._workspace_response,
@@ -69,6 +80,9 @@ def parse_workspace(org, _ws, basedir, new_workspace_name=False, filename=False,
                 separators=(',',':')))
         sys.stderr.write(str(e))
         sys.stderr.write("\n")
+    return _ws
+
+    
 
 def add_vars(_vars):
     for var in _vars:
@@ -96,15 +110,29 @@ def main(opt):
             continue
         
         if not opt.output:
-            parse_workspace(opt.tfe_organization, _ws, basedir, 
-                new_workspace_name=opt.new_workspace_name, 
-                skip_keys=opt.skip_keys)
+            ws_name = parse_workspace(opt.tfe_organization, _ws, basedir, 
+                new_workspace_name=opt.new_workspace_name)
         else:
             parse_workspace(opt.tfe_organization, _ws, basedir, 
                 new_workspace_name=opt.new_workspace_name, 
-                filename=opt.output, 
-                skip_keys=opt.skip_keys)
-            
+                filename=opt.output)
+        
+        ws_obj = workspace.TFEWorkSpace(opt.tfe_organization, _ws)
+        parse_variables(
+            basedir,
+            ws_obj, 
+            ws_name, 
+            opt.skip_keys
+        )
+        
+        parse_teams(
+            basedir,
+            ws_obj,
+            ws_name
+        )
+    
+    # these variables will always need to be added
+    add_vars(("oauth_token_id", "organization"))
     if opt.add_vars:
         add_vars(opt.add_vars)
 

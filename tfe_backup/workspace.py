@@ -29,8 +29,7 @@ class TFEWorkSpace(object):
         self._workspace_response = False
         self._rendered = False
         self.workspace_variables = []
-        with open("{0}/templates/workspace.j2".format(self._base_dir)) as workspace_template:
-            self.ws_template = Template(workspace_template.read())
+        self.workspace()
 
     @staticmethod
     def list(organization):
@@ -76,10 +75,12 @@ class TFEWorkSpace(object):
 
 
     def rendered(self, organization_name=None, workspace_name=None, force=False):
+        with open("{0}/templates/workspace.j2".format(self._base_dir)) as workspace_template:
+            self.ws_template = Template(workspace_template.read())
+
         if self._rendered and not force:
             return self._rendered
         else:
-            self.workspace()
             vcs_repo_data = dict()
             vcs_repo = self._workspace_response.get("vcs-repo")
             for k, v in vcs_repo.items():
