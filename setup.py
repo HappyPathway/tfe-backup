@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tfe_backup",
-    version="2.4.2",
+    version="2.5.0",
     author="Dave Arnold",
     author_email="dave@happypathway.com",
     description="Utilties for backing up TFE Workspaces as Terraform Code",
@@ -22,7 +22,12 @@ setuptools.setup(
         'tfe_backup/tfe-backup',
         'scripts/tfe-oauth-tokens'
     ],
-    packages=["tfe_backup"],
+    packages=[
+        "tfe_backup",
+        "tfe_backup.lib",
+        "tfe_backup.lib.workspace",
+        "tfe_backup.lib.workspace_variables"
+    ],
     package_data={
       'tfe_backup': [
           "lib/templates/undefined_vars.j2",
