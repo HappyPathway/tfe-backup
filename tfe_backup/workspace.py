@@ -81,21 +81,22 @@ class TFEWorkSpace(object):
         if self._rendered and not force:
             return self._rendered
         else:
-            vcs_repo_data = dict()
-            vcs_repo = self._workspace_response.get("vcs-repo")
-            for k, v in vcs_repo.items():
-                if "-" in k:
-                    vcs_repo_data["_".join(k.split("-"))] = v
-                else:
-                    vcs_repo_data[k] = v
-            ing_submod = vcs_repo_data["ingress_submodules"]
-            vcs_repo_data["ingress_submodules"] = str(ing_submod).lower()
-            vcs_repo_data["oauth_token_id"] = "${var.oauth_token_id}"
-
             working_directory = self._workspace_response.get("working-directory")
             if not working_directory:
                 working_directory = []
-                
+
+            vcs_repo_data = dict()
+            vcs_repo = self._workspace_response.get("vcs-repo")
+            if vcs_repo:
+                for k, v in vcs_repo.items():
+                    if "-" in k:
+                        vcs_repo_data["_".join(k.split("-"))] = v
+                    else:
+                        vcs_repo_data[k] = v
+                ing_submod = vcs_repo_data["ingress_submodules"]
+                vcs_repo_data["ingress_submodules"] = str(ing_submod).lower()
+                vcs_repo_data["oauth_token_id"] = "${var.oauth_token_id}"
+
             almost_rendered = partial(self.ws_template.render,
                 vcs_repo=vcs_repo_data,
                 working_directory=working_directory,

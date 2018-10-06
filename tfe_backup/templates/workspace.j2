@@ -9,6 +9,7 @@ resource "tfe_workspace" "{{ workspace_name.split("-")|join("_") }}" {
     {% if working_directory and working_directory|length > 0 %}
     working_directory = "{{ working_directory }}"
     {% endif %}
+    {% if vcs_repo %}
     vcs_repo = {
         identifier = "{{ vcs_repo.identifier }}"
         {% if vcs_repo.branch and vcs_repo.branch|length > 0 %}
@@ -17,4 +18,5 @@ resource "tfe_workspace" "{{ workspace_name.split("-")|join("_") }}" {
         oauth_token_id = "{{ vcs_repo.oauth_token_id }}"
         ingress_submodules = {{ vcs_repo.ingress_submodules }}
     }
+    {% endif %}
 }

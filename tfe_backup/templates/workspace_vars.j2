@@ -2,7 +2,7 @@ resource "tfe_variable" "{{ workspace.split("-")|join("_") }}_{{ key }}" {
   key = "{{ key }}"
   value = "{{ value }}"
   category = "{{ category }}"
-  workspace_id = "${tfe_workspace.{{ workspace }}.id}"
+  workspace_id = "${tfe_workspace.{{ workspace.split("-")|join("_") }}.id}"
   hcl = {{ hcl|lower }}
   sensitive = {{ sensitive|lower }}
 }
