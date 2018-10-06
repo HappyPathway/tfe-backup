@@ -21,8 +21,13 @@ def main(opt, args):
 
     headers = {"Authorization": "Bearer {0}".format(atlas_token)}
  
-    resp = requests.get("https://{0}/api/v2/organizations/{1}/oauth-tokens".format(opt.api, org), headers=headers)
-    data = resp.json()
+    try:
+        resp = requests.get("https://{0}/api/v2/organizations/{1}/oauth-tokens".format(opt.api, org), headers=headers)
+        data = resp.json()
+    except UnboundLocalError:
+        sys.stderr.write("Please specify TFE Organization\n")
+        sys.exit(1)
+        
     try:
         print(data.get("data")[0].get("id"))
     except:
