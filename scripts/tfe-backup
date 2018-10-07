@@ -3,11 +3,32 @@ from __future__ import print_function
 from tfe_backup import workspace
 from tfe_backup import workspace_variables
 from tfe_backup import team_access
+from tfe_backup import tfe_session
 import os
 import json
 from subprocess import Popen, PIPE
 import shlex
 import sys
+import hcl
+
+class TFEBackupException(Exception): pass
+
+
+def hcl_config(api, config, token=False):
+    try:
+        if token:
+            return token
+        elif os.environ.get("ATLAS_TOKEN"):
+            return os.environ.get("ATLAS_TOKEN")
+        else:
+            config_api_url = api.split("https://")[1]
+            with open(config, 'r') as fp:
+                obj = hcl.load(fp)
+            token = obj.get('credentials').get(config_api_url).get('token')
+            os.environ["ATLAS_TOKEN"] = token
+            return token
+    except Exception as e:
+        raise TFEBackupException("No Atlas Token Set!\n")
 
 def _call(cmd, error_message=None):
     p = Popen(shlex.split(cmd), 
@@ -95,6 +116,16 @@ def dump_vars(basedir):
             vars_file.write(twsvar)
 
 
+def tfe_error():
+    sys.stderr.write(
+        "Could not find workspaces for Organization.\n"
+    )
+    if not os.environ.get("ATLAS_TOKEN"):
+        sys.stderr.write(
+            "ATLAS_TOKEN environment Vairable is not set.\n"
+        )
+    sys.exit(1)
+
 def main(opt):
     basedir = sanitize_path(opt.basedir)
     workspace.TFEWorkSpace.base_url = opt.api
@@ -105,7 +136,13 @@ def main(opt):
 
     print("Org: ", opt.tfe_organization)
     
-    for _ws in workspace.TFEWorkSpace.list(opt.tfe_organization):
+    try:
+        # testing for workspaces
+        found_workspaces = [x for x in workspace.TFEWorkSpace.list(opt.tfe_organization)]
+    except TypeError as e:
+        tfe_error()
+
+    for _ws in found_workspaces:
         if opt.tfe_workspace and _ws != opt.tfe_workspace:
             continue
         
@@ -165,21 +202,73 @@ def main(opt):
 
 if __name__ == '__main__':
     from optparse import OptionParser, OptionGroup
-    parser = OptionParser()
-    parser.add_option('--api', default='https://app.terraform.io')
-    
-    parser.add_option('-o', '--org', dest="tfe_organization")
-    parser.add_option('-w', '--workspace', dest="tfe_workspace", default=False)
-    parser.add_option('--output')
-    parser.add_option('--new-ws', dest="new_workspace_name")
-    parser.add_option('--vars', action='append', dest='add_vars')
-    parser.add_option('--fmt', action='store_true', default=False)
-    parser.add_option('--init', action='store_true', default=False)
-    parser.add_option('--validate', action='store_true', default=False)
-    parser.add_option('-b', '--basedir')
-    parser.add_option('--skip', action='append', dest='skip_keys')
-    
-    opt, args = parser.parse_args()
+    import argparse
+    parser = argparse.ArgumentParser(prog='tfe-backup')
+    # parser = OptionParser()
+    parser.add_argument('--api', default='https://app.terraform.io')
+    parser.add_argument('--token',
+        dest="tfe_token",
+        help="Terraform Enterprise Token"
+    )
+    parser.add_argument('--config', 
+        default=sanitize_path("~/.terraformrc"),
+        help="Specify Location of terraformrc Config file."
+    )
+    parser.add_argument('-o', '--org', 
+        dest="tfe_organization", 
+        required=True,
+        help="Terraform Enterprise Organization"
+    )
+    parser.add_argument('-w', '--workspace', 
+        dest="tfe_workspace", 
+        default=False,
+        help="Terraform Enterprise Workspace"
+    )
+    parser.add_argument('--output',
+        help="Output File. Defaults to name of Workspace"
+    )
+    parser.add_argument('--new-ws', 
+        dest="new_workspace_name",
+        help="Name of new Workspace. Only valid if running against one workspace"
+    )
+    parser.add_argument('--vars', 
+        action='append', 
+        dest='add_vars',
+        help="Add extra arguments"
+    )
+    parser.add_argument('--fmt', 
+        action='store_true', 
+        default=False,
+        help="Run Terraform FMT on Output Files"
+    )
+    parser.add_argument('--init', 
+        action='store_true', 
+        default=False,
+        help="Run Terraform Init in order to pull down Providers"
+    )
+    parser.add_argument('--validate', 
+        action='store_true', 
+        default=False,
+        help="Validate Terraform Configuration."
+    )
+    parser.add_argument('-b', '--basedir', 
+        default=os.path.abspath(os.environ.get("PWD")),
+        help="Base Directory for output files"
+    )
+    parser.add_argument('--skip', 
+        action='append', 
+        dest='skip_keys',
+        help="Skip these variables"
+    )
+    opt = parser.parse_args()
+
+    try:
+        token = hcl_config(opt.api, sanitize_path(opt.config), opt.tfe_token)
+        session = tfe_session.TFESession(opt.api, token)
+    except TFEBackupException as tfe_exception:
+        sys.stderr.write(str(tfe_exception))
+        sys.exit(1)
+
     try:
         main(opt)
     except KeyboardInterrupt:

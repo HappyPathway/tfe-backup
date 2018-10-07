@@ -3,28 +3,21 @@ import os
 from jinja2 import Template
 from functools import partial
 import urllib
-
-class TFEWorkSpaceVariables(object):
-    base_url = "https://app.terraform.io"
+from tfe_backup.tfe_session import TFESession
+class TFEWorkSpaceVariables(TFESession):
     output_dir = "/tmp"
-    session_headers = {
-        "Authorization": "Bearer {0}".format(os.environ.get("ATLAS_TOKEN")),
-        "Content-Type": "application/vnd.api+json"
-    }
+    undefined_variables = set()
     _base_dir = os.path.dirname(__file__)
     basedir = os.path.join(os.environ.get("PWD"), "tfe_setup")
 
     def __init__(self, org, workspace, base_url=False):
-        self.undefined_variables = set()
+        super()
         self._org = org
         self._workspace = workspace
         if base_url:
             self.base_url = base_url
         self.api_url = "{0}/api/v2/vars".format(self.base_url)
         self._variable_response = False
-        
-        self.session = requests.Session()
-        self.session.headers = self.session_headers
         self.query_params = "filter%5Borganization%5D%5Bname%5D={org}&filter%5Bworkspace%5D%5Bname%5D={workspace}"
         with open("{0}/templates/workspace_vars.j2".format(self._base_dir)) as vars_template:
             self.vars_template = Template(vars_template.read())

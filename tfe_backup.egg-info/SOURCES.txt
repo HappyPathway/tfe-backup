@@ -5,6 +5,7 @@ scripts/tfe-oauth-tokens
 tfe_backup/__Init__.py
 tfe_backup/__init__.py
 tfe_backup/team_access.py
+tfe_backup/tfe_session.py
 tfe_backup/workspace.py
 tfe_backup/workspace_variables.py
 tfe_backup.egg-info/PKG-INFO

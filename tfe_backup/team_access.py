@@ -2,17 +2,14 @@ import requests
 import os
 from jinja2 import Template
 from functools import partial
+from tfe_backup.tfe_session import TFESession
 from tfe_backup.workspace_variables import TFEWorkSpaceVariables
 import urllib
 
-class TFETeamAccess(object):
-    base_url = "https://app.terraform.io"
-    session_headers = {
-        "Authorization": "Bearer {0}".format(os.environ.get("ATLAS_TOKEN")),
-        "Content-Type": "application/vnd.api+json"
-    }
+class TFETeamAccess(TFESession):
 
     def __init__(self, workspace, workspace_id, base_url=False, clone=True):
+        super()
         self.clone = clone
         self._base_dir = os.path.dirname(__file__)
         self._workspace = workspace
