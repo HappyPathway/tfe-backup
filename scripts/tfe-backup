@@ -189,9 +189,9 @@ def main(opt):
         with open(tfvars_file, "w") as tfvars:
             for _var in workspace_variables.TFEWorkSpaceVariables.undefined_variables:
                 tfvars.write('{0}="{1}"\n'.format(_var, opt.tfe_organization))
-
-    if opt.init:
         _call("terraform init")
+        
+
     if opt.validate:
         _call("terraform validate")
 
