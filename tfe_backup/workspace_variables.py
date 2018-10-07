@@ -11,11 +11,11 @@ class TFEWorkSpaceVariables(object):
         "Authorization": "Bearer {0}".format(os.environ.get("ATLAS_TOKEN")),
         "Content-Type": "application/vnd.api+json"
     }
-    undefined_variables = set()
     _base_dir = os.path.dirname(__file__)
     basedir = os.path.join(os.environ.get("PWD"), "tfe_setup")
 
     def __init__(self, org, workspace, base_url=False):
+        self.undefined_variables = set()
         self._org = org
         self._workspace = workspace
         if base_url:

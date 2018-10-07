@@ -180,5 +180,8 @@ if __name__ == '__main__':
     parser.add_option('--skip', action='append', dest='skip_keys')
     
     opt, args = parser.parse_args()
-    main(opt)
+    try:
+        main(opt)
+    except KeyboardInterrupt:
+        sys.exit(1)
     
